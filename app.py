@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request
+from flask import Flask, request, render_template
 import math
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
@@ -22,13 +23,18 @@ def calcul_patisseries_et_baguettes(nb_petits_dejeuners):
 
     return nb_croissants, nb_pains_chocolat, nb_baguettes, nb_baguettes_aux_graines, nb_baguettes_blanches
 
-@app.route("/", methods=["GET", "POST"])
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    if request.method == "POST":
-        nb_petits_dejeuners = int(request.form["nb_petits_dejeuners"])
-        nb_croissants, nb_pains_chocolat, nb_baguettes, nb_baguettes_aux_graines, nb_baguettes_blanches = calcul_patisseries_et_baguettes(nb_petits_dejeuners)
-        return render_template("result.html", nb_croissants=nb_croissants, nb_pains_chocolat=nb_pains_chocolat, nb_baguettes=nb_baguettes, nb_baguettes_aux_graines=nb_baguettes_aux_graines, nb_baguettes_blanches=nb_baguettes_blanches)
-    return render_template("index.html")
+    if request.method == 'POST':
+        nb_petits_dejeuners = int(request.form['nb_petits_dejeuners'])
 
-if __name__ == "__main__":
+        nb_croissants, nb_pains_chocolat, nb_baguettes, nb_baguettes_aux_graines, nb_baguettes_blanches = calcul_patisseries_et_baguettes(nb_petits_dejeuners)
+
+        date_lendemain = datetime.now() + timedelta(days=1)
+        date_lendemain_str = date_lendemain.strftime('%Y-%m-%d')
+
+        return render_template('result.html', nb_croissants=nb_croissants, nb_pains_chocolat=nb_pains_chocolat, nb_baguettes=nb_baguettes, nb_baguettes_aux_graines=nb_baguettes_aux_graines, nb_baguettes_blanches=nb_baguettes_blanches, date_lendemain=date_lendemain_str)
+    return render_template('index.html')
+
+if __name__ == '__main__':
     app.run(debug=True)
