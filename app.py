@@ -31,7 +31,7 @@ def index():
         nb_croissants, nb_pains_chocolat, nb_baguettes, nb_baguettes_aux_graines, nb_baguettes_blanches = calcul_patisseries_et_baguettes(nb_petits_dejeuners)
 
         date_lendemain = datetime.now() + timedelta(days=1)
-        date_lendemain_str = date_lendemain.strftime('%Y-%m-%d')
+        date_lendemain_str = date_lendemain.strftime('%d-%m-%Y')
 
         return render_template('result.html', nb_croissants=nb_croissants, nb_pains_chocolat=nb_pains_chocolat, nb_baguettes=nb_baguettes, nb_baguettes_aux_graines=nb_baguettes_aux_graines, nb_baguettes_blanches=nb_baguettes_blanches, date_lendemain=date_lendemain_str)
     return render_template('index.html')
