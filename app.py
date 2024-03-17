@@ -1,6 +1,9 @@
 from flask import Flask, request, render_template
 import math
 from datetime import datetime, timedelta
+toto = 1
+jours = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
+
 
 app = Flask(__name__)
 
@@ -25,16 +28,18 @@ def calcul_patisseries_et_baguettes(nb_petits_dejeuners):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    date_lendemain = datetime.now() + timedelta(days=1)
+    date_lendemain_str = date_lendemain.strftime('%d-%m-%Y')
+
+    
+    jour = jours[date_lendemain.isoweekday()]
+
     if request.method == 'POST':
         nb_petits_dejeuners = int(request.form['nb_petits_dejeuners'])
 
         nb_croissants, nb_pains_chocolat, nb_baguettes, nb_baguettes_aux_graines, nb_baguettes_blanches = calcul_patisseries_et_baguettes(nb_petits_dejeuners)
-
-        date_lendemain = datetime.now() + timedelta(days=1)
-        date_lendemain_str = date_lendemain.strftime('%d-%m-%Y')
-
-        return render_template('result.html', nb_croissants=nb_croissants, nb_pains_chocolat=nb_pains_chocolat, nb_baguettes=nb_baguettes, nb_baguettes_aux_graines=nb_baguettes_aux_graines, nb_baguettes_blanches=nb_baguettes_blanches, date_lendemain=date_lendemain_str)
-    return render_template('index.html')
+        return render_template('result.html', nb_croissants=nb_croissants, nb_pains_chocolat=nb_pains_chocolat, nb_baguettes=nb_baguettes, nb_baguettes_aux_graines=nb_baguettes_aux_graines, nb_baguettes_blanches=nb_baguettes_blanches, date_lendemain=date_lendemain_str, jour =jour)
+    return render_template('index.html',date_lendemain=date_lendemain_str, jour = jour )
 
 if __name__ == '__main__':
     app.run(debug=True)
